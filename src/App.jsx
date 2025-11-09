@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PurifierList from './components/PurifierList';
 import Footer from './components/Footer';
+import Modal from './components/Modal';
+import { DEFAULT_PURIFIERS } from './components/data';
 
 function About() {
   return (
@@ -44,6 +46,10 @@ function Contact() {
 
 export default function App() {
   const [page, setPage] = useState('home');
+  const [customItems, setCustomItems] = useState(null);
+  const [active, setActive] = useState(null);
+
+  const items = useMemo(() => customItems ?? DEFAULT_PURIFIERS, [customItems]);
 
   const onExplore = () => setPage('purifiers');
 
@@ -54,7 +60,7 @@ export default function App() {
       {page === 'home' && (
         <>
           <Hero onExplore={onExplore} />
-          <PurifierList />
+          <PurifierList items={items} onView={setActive} />
           <About />
           <Contact />
         </>
@@ -63,7 +69,7 @@ export default function App() {
       {page === 'purifiers' && (
         <>
           <Hero onExplore={onExplore} />
-          <PurifierList />
+          <PurifierList items={items} onView={setActive} />
         </>
       )}
 
@@ -72,6 +78,39 @@ export default function App() {
       {page === 'contact' && <Contact />}
 
       <Footer />
+
+      <Modal
+        open={!!active}
+        onClose={() => setActive(null)}
+        title={active?.name || 'Details'}
+        footer={
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-slate-500">Series: {active?.series} • Color: {active?.color}</div>
+            <button
+              onClick={() => setActive(null)}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700"
+            >
+              Close
+            </button>
+          </div>
+        }
+      >
+        {active && (
+          <div className="grid sm:grid-cols-2 gap-4">
+            <img src={active.image} alt={active.name} className="w-full h-64 object-cover rounded-xl" />
+            <div>
+              <h4 className="font-semibold mb-2">Highlights</h4>
+              <ul className="space-y-1 text-slate-700 text-sm">
+                {active.highlights?.map((h) => (
+                  <li key={h} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />{h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

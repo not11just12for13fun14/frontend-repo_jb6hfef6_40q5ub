@@ -1,14 +1,25 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
+import Spline from '@splinetool/react-spline';
 
 export default function Hero({ onExplore }) {
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-white to-white" />
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      {/* Spline 3D background */}
+      <div className="absolute inset-0">
+        <Spline
+          scene="https://prod.spline.design/8gXjNn2s3p3W4C5u/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
+
+      {/* Soft gradient overlay to improve readability */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/80 via-white/70 to-white" />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28">
         <div className="grid lg:grid-cols-2 items-center gap-10">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 shadow-sm">
               <Sparkles size={14} /> Pure water. Pure design.
             </div>
             <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
